@@ -37,8 +37,9 @@ case class Board(characters: List[Character], player1: Player, player2: Player) 
    *
    * @return A random character.
    */
-  private def getRandomCharacter: Character = {
+  def getRandomCharacter: Character = {
     val randomCharacterIndex: Int = randomNumGen.nextInt(characters.length)
+    println(randomCharacterIndex) //look into loggers in the future
     characters(randomCharacterIndex)
   }
 
@@ -49,6 +50,8 @@ case class Board(characters: List[Character], player1: Player, player2: Player) 
     currentPlayer = player1
     player1.opponent = player2
     player2.opponent = player1
+//    player1.characterToGuess = Character("Alice", Blue, Blonde, Red, Female, hasGlasses = true, hasBeard = false, hasHat = false, hasPet = true)
+//    player2.characterToGuess = Character("Bob", Brown, Black, Blue, Male, hasGlasses = false, hasBeard = true, hasHat = true, hasPet = false)
     player1.characterToGuess = getRandomCharacter
     player2.characterToGuess = getRandomCharacter
   }
@@ -80,7 +83,7 @@ case class Board(characters: List[Character], player1: Player, player2: Player) 
         s"The character has ${currentPlayer.characterToGuess.eyeColour} eyes.",
         s"The character has ${currentPlayer.characterToGuess.hairColour} hair.",
         s"The character has a ${currentPlayer.characterToGuess.jumperColour} jumper.",
-        s"The character is ${if (currentPlayer.characterToGuess.isMale) "male" else "not male"}",
+        s"The character is ${currentPlayer.characterToGuess.gender} male",
         s"The character ${if (currentPlayer.characterToGuess.hasPet) "has" else "does not have"} a pet.",
         s"The character ${if (currentPlayer.characterToGuess.hasHat) "has" else "does not have"} a hat.",
         s"The character ${if (currentPlayer.characterToGuess.hasBeard) "has" else "does not have"} a beard.",
@@ -110,15 +113,15 @@ case class Board(characters: List[Character], player1: Player, player2: Player) 
    */
   def askQuestion(userQuestion: String, guess: String = ""): Boolean = {
     if (userQuestion == "male") {
-      currentPlayer.characterToGuess.isMale
+      currentPlayer.characterToGuess.gender == Male
     } else if (userQuestion == "female") {
-      !currentPlayer.characterToGuess.isMale
+      currentPlayer.characterToGuess.gender == Female
     } else if (userQuestion == "hair") {
-      currentPlayer.characterToGuess.hairColour == guess
+      currentPlayer.characterToGuess.hairColour.toString.toLowerCase == guess
     } else if (userQuestion == "eyes") {
-      currentPlayer.characterToGuess.eyeColour == guess
+      currentPlayer.characterToGuess.eyeColour.toString.toLowerCase == guess
     } else if (userQuestion == "jumper") {
-      currentPlayer.characterToGuess.jumperColour == guess
+      currentPlayer.characterToGuess.jumperColour.toString.toLowerCase == guess
     } else if (userQuestion == "glasses") {
       currentPlayer.characterToGuess.hasGlasses
     } else if (userQuestion == "pet") {

@@ -1,9 +1,10 @@
-
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
+import scala.util.Random
+
 class BoardSpec extends AnyWordSpec with Matchers {
-  private val character = Character("Alice", "blue", "blonde", "red", isMale = false, hasGlasses = true, hasBeard = false, hasHat = false, hasPet = true)
+  private val character = Character("Alice", Blue, Blonde, Red, Female, hasGlasses = true, hasBeard = false, hasHat = false, hasPet = true)
 
   private val characterList: List[Character] = List(character)
 
@@ -11,6 +12,8 @@ class BoardSpec extends AnyWordSpec with Matchers {
   private val player2: Player = Player("April")
 
   private val boardTest = Board(characterList, player1, player2)
+
+//  case class Character(name: String, eyeColour: Colour, hairColour: Colour, jumperColour: Colour, gender: Gender, hasGlasses: Boolean, hasBeard: Boolean, hasHat: Boolean, hasPet: Boolean)
 
   "guessCharacter" should {
     "return true" when {
@@ -128,6 +131,20 @@ class BoardSpec extends AnyWordSpec with Matchers {
         val input = boardTest.askQuestion("hat")
         val expectedResult = false
         input shouldBe expectedResult
+      }
+    }
+  }
+  "getRandomCharacter" should {
+    "return a random character from the character instances list" when {
+      "the game is initiated" in {
+        val selector = Board(characterList, player1, player2)
+        val characters = characterList
+
+        val randomCharacter = selector.getRandomCharacter
+
+        characters should contain(randomCharacter)
+
+
       }
     }
   }

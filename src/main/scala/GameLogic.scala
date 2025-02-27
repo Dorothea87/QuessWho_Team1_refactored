@@ -1,3 +1,4 @@
+import scala.annotation.tailrec
 import scala.io.StdIn.readLine
 
 object GameLogic extends App {
@@ -8,16 +9,16 @@ object GameLogic extends App {
    * @return The initialized game board.
    */
   private def initializeBoard: Board = {
-    val character1 = Character("Alice", "blue", "blonde", "red", isMale = false, hasGlasses = true, hasBeard = false, hasHat = false, hasPet = true)
-    val character2 = Character("Bob", "brown", "black", "blue", isMale = true, hasGlasses = false, hasBeard = true, hasHat = true, hasPet = false)
-    val character3 = Character("Charlie", "green", "brown", "green", isMale = true, hasGlasses = true, hasBeard = false, hasHat = false, hasPet = true)
-    val character4 = Character("Diana", "hazel", "red", "yellow", isMale = false, hasGlasses = false, hasBeard = false, hasHat = true, hasPet = false)
-    val character5 = Character("Eve", "blue", "black", "purple", isMale = false, hasGlasses = true, hasBeard = false, hasHat = false, hasPet = true)
-    val character6 = Character("Frank", "brown", "blonde", "orange", isMale = true, hasGlasses = false, hasBeard = true, hasHat = true, hasPet = false)
-    val character7 = Character("Grace", "green", "brown", "pink", isMale = false, hasGlasses = true, hasBeard = false, hasHat = false, hasPet = true)
-    val character8 = Character("Hank", "hazel", "red", "blue", isMale = true, hasGlasses = false, hasBeard = true, hasHat = true, hasPet = false)
-    val character9 = Character("Ivy", "blue", "black", "green", isMale = false, hasGlasses = true, hasBeard = false, hasHat = false, hasPet = true)
-    val character10 = Character("Jack", "brown", "blonde", "yellow", isMale = true, hasGlasses = false, hasBeard = true, hasHat = true, hasPet = false)
+    val character1 = Character("Alice", Blue, Blonde, Red, Female, hasGlasses = true, hasBeard = false, hasHat = false, hasPet = true)
+    val character2 = Character("Bob", Brown, Black, Blue, Male, hasGlasses = false, hasBeard = true, hasHat = true, hasPet = false)
+    val character3 = Character("Charlie", Green, Brown, Green, Male, hasGlasses = true, hasBeard = false, hasHat = false, hasPet = true)
+    val character4 = Character("Diana", Hazel, Red, Yellow, Female, hasGlasses = false, hasBeard = false, hasHat = true, hasPet = false)
+    val character5 = Character("Eve", Blue, Black, Purple, Female, hasGlasses = true, hasBeard = false, hasHat = false, hasPet = true)
+    val character6 = Character("Frank", Brown, Blonde, Orange, Male, hasGlasses = false, hasBeard = true, hasHat = true, hasPet = false)
+    val character7 = Character("Grace", Green, Brown, Pink, Female, hasGlasses = true, hasBeard = false, hasHat = false, hasPet = true)
+    val character8 = Character("Hank", Hazel, Red, Blue, Male, hasGlasses = false, hasBeard = true, hasHat = true, hasPet = false)
+    val character9 = Character("Ivy", Blue, Black, Green, Female, hasGlasses = true, hasBeard = false, hasHat = false, hasPet = true)
+    val character10 = Character("Jack", Brown, Blonde, Yellow, Male, hasGlasses = false, hasBeard = true, hasHat = true, hasPet = false)
 
     val player1: Player = Player("Andy")
     val player2: Player = Player("April")
@@ -164,39 +165,85 @@ object GameLogic extends App {
   /**
    * Starts the game and manages the game loop.
    */
-  private def startGame(): Unit = {
-    println("Welcome to Quess Who!")
+    @tailrec
+  private def startGame(board: Board): Unit = {
+    println("Welcome to Guess Who!")
     println("Here are the characters on the board:\n")
     board.characters.foreach(character => println(character.name))
     println("\nTime to guess!")
 
-    while (true) {
-      println(s"It's your turn ${board.getCurrentPlayerName}")
-      println("Select one of the options below:\n")
-      println("1. Guess character")
-      println("2. Ask question")
-      println("3. Give me a hint!\n")
+    println(s"It's your turn ${board.getCurrentPlayerName}")
+    println("Select one of the options below:\n")
+    println("1. Guess character")
+    println("2. Ask question")
+    println("3. Give me a hint!\n")
 
-      val userChoice: String = readLine("Your choice: ")
-      println()
+    val userChoice: String = readLine("Your choice: ")
+    println()
 
-      if (userChoice == "1") {
+    userChoice match {
+      case "1" =>
         guessNameOption()
-      } else if (userChoice == "2") {
+        board.switchPlayer()
+        startGame(board)
+      // Recursive call with updated board state
+
+      case "2" =>
         askQuestionOption()
-      } else if (userChoice == "3") {
+        board.switchPlayer()
+        startGame(board)
+      // Recursive call with updated board state
+
+      case "3" =>
         giveHintOption()
-      } else {
+        board.switchPlayer()
+        startGame(board)
+      // Recursive call with updated board state
+
+      case _ =>
         println("That's not a valid choice.")
         board.switchPlayer()
-      }
-
-      board.switchPlayer()
-
-      println()
+        startGame(board)
+      // Recursive call with updated board state
     }
   }
 
-  // Start the game
-  startGame()
+  // Start the game with the initial board state
+  startGame(board)
+
+  //  private def startGame(): Unit = {
+  //    println("Welcome to Quess Who!")
+  //    println("Here are the characters on the board:\n")
+  //    board.characters.foreach(character => println(character.name))
+  //    println("\nTime to guess!")
+  //
+  //    while (true) {
+  //      println(s"It's your turn ${board.getCurrentPlayerName}")
+  //      println("Select one of the options below:\n")
+  //      println("1. Guess character")
+  //      println("2. Ask question")
+  //      println("3. Give me a hint!\n")
+  //
+  //      val userChoice: String = readLine("Your choice: ")
+  //      println()
+  //
+  //      if (userChoice == "1") {
+  //        guessNameOption()
+  //      } else if (userChoice == "2") {
+  //        askQuestionOption()
+  //      } else if (userChoice == "3") {
+  //        giveHintOption()
+  //      } else {
+  //        println("That's not a valid choice.")
+  //        board.switchPlayer()
+  //      }
+  //
+  //      board.switchPlayer()
+  //
+  //      println()
+  //    }
+  //  }
+  //
+  //  // Start the game
+  //  startGame()
 }
