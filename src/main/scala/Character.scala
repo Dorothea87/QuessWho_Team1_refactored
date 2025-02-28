@@ -5,7 +5,7 @@
  * @param eyeColour    The eye color of the character.
  * @param hairColour   The hair color of the character.
  * @param jumperColour The jumper color of the character.
- * @param isMale       Indicates if the character is male.
+ * @param gender       Indicates if the character is male or female.
  * @param hasGlasses   Indicates if the character has glasses.
  * @param hasBeard     Indicates if the character has a beard.
  * @param hasHat       Indicates if the character has a hat.
